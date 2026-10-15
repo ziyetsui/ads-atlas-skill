@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try { const t = localStorage.getItem('atlas-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}</script>
+<title>Atlas</title>
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  .home { max-width: 760px; margin: 0 auto; padding: 88px 24px 96px; }
+  .home h1 { font-family: var(--font-serif); font-weight: 900; font-size: clamp(32px, 5vw, 48px); line-height: 1.12; letter-spacing: -0.02em; margin-top: 12px; }
+  .home .lede { margin-top: 14px; color: var(--ink-2); max-width: 52ch; }
+  .list { list-style: none; margin: 48px 0 0; padding: 0; display: grid; gap: 12px; }
+  .list a {
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 24px;
+    padding: 20px 22px; border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow-1);
+    text-decoration: none; transition: box-shadow 200ms var(--ease-out), transform 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) { .list a:hover { box-shadow: var(--shadow-2); } .list a:hover .go { color: var(--ink); } }
+  .list a:active { transform: scale(0.99); }
+  .list .t { display: flex; align-items: baseline; gap: 10px; font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
+  .list .b { font-size: 12px; font-weight: 500; color: var(--ink-3); }
+  .list .d { grid-column: 1; font-size: 14px; color: var(--ink-2); }
+  .list .go { grid-row: 1 / span 2; grid-column: 2; font-size: 13px; color: var(--ink-3); white-space: nowrap; transition: color 150ms ease; }
+  .list li { opacity: 0; transform: translateY(8px); animation: home-in 300ms var(--ease-out) forwards; animation-delay: calc(var(--i) * 50ms); }
+  @keyframes home-in { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .list li { animation: none; opacity: 1; transform: none; } }
+  .foot { margin-top: 32px; font-size: 12px; color: var(--ink-3); }
+  @media (max-width: 520px) { .home { padding: 56px 16px 72px; } .list a { grid-template-columns: 1fr; } .list .go { grid-row: auto; grid-column: 1; } }
+</style>
+</head>
+<body>
+<main class="home">
+  <p class="eyebrow">Atlas</p>
+  <h1>竞品爆款 Brief</h1>
+  <p class="lede">每份 brief 一页读完：先讲清楚产品，再锁定竞品、看竞品的爆款、拆单条爆款，最后提炼规律、落到产品上。</p>
+  <ol class="list" id="list"></ol>
+  <p class="foot">数据来自小红书聚光「内容广场」榜单。</p>
+</main>
+<script src="briefs.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+  (function () {
+    const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    document.getElementById('list').innerHTML = (window.BRIEFS || []).map((b, i) => `<li style="--i:${i}">
+      <a href="${esc(b.slug)}/"><span class="t">${esc(b.name)}<span class="b">${esc(b.brand)}</span></span>
+        <span class="d">${esc(b.oneLine)}</span><span class="go">打开 →</span></a></li>`).join('');
+    AtlasUI.topBar({ home: true });
+  })();
+</script>
+</body>
+</html>

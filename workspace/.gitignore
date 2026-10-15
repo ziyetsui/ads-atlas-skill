@@ -1,0 +1,3 @@
+.DS_Store
+# raw pulls, the library built from them, and media download cache: rebuildable, large
+data/
